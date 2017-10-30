@@ -1,0 +1,4 @@
+const SDK = {
+    serverURL:  "",
+    request: ()
+}
