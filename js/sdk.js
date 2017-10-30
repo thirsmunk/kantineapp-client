@@ -15,6 +15,25 @@ const SDK = {
             });
 
         }
+
+        $.ajax({
+           url: SDK.serverURL + options.url,
+           method: options.method,
+            //The headers are retrieved by the above loop
+            headers: headers,
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(options.data),
+            //xhr?
+            success: (data, status, xhr) => {
+               //why null?
+               callback(null, data, status, xhr);
+            },
+            error: (xhr, status, errorThrown) => {
+               callback({xhr: xhr, status: status, error: errorThrown});
+            }
+
+        });
         
 }
 }
