@@ -35,5 +35,73 @@ const SDK = {
 
         });
         
+},
+
+Staff: {
+    findAll: (callback) => {
+        SDK.request({
+            method: "GET",
+            url:"/staff/getOrders/",
+            headers: {
+             filter: {
+                 include: [""]
+             }
+           }
+        }, callback);
+    },
+
+    makeReady: (callback) => {
+        SDK.request({
+            method: "POST",
+            url:"/staff/" + "", //orderid
+            headers: {
+             filter: {
+                 include: [""]
+             }
+            }
+        }, callback);
+    }
+},
+
+User: {
+        createOrder: (callback) => {
+            SDK.request({
+                method: "POST",
+                url:"/user/createOrder",
+                headers: {
+                    filter: {
+                        include: [""]
+                    }
+                }
+            }, callback);
+        },
+
+        myOrder: (callback) => {
+            SDK.request({
+                method: "GET",
+                url:"/user/getOrdersById/" + "", //orderID
+                headers: {
+                    filter: {
+                        include: [""]
+                    }
+                }
+            }, callback)
+        },
+
+        findAll: (callback) => {
+            SDK.request({
+                method: "GET",
+                url: "/user/getItems/",
+                headers: {
+                    filter: {
+                        include: [""]
+                    }
+                }
+            }, callback)
+        }
+
+
 }
+
+
 }
