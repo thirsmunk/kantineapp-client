@@ -1,9 +1,9 @@
 const SDK = {
-    serverURL: "",
+    serverURL: "http://localhost:8080/",
     request: (options, callback) => {
 
         //Retrieves the token from localStorage - initially (during login) it's empty
-        //But after succesful login the token value will be saved in localStorage and used for each request
+        //But after successful login the token value will be saved in localStorage and used for each request
         let token = localStorage.getItem('token');
 
         $.ajax({
@@ -11,7 +11,7 @@ const SDK = {
             method: options.method,
             //The headers are retrieved by the above loop
             headers: {
-                token: token,
+                token: token
             },
             contentType: "application/json",
             dataType: "json",
@@ -76,8 +76,8 @@ const SDK = {
         logIn: (username, password, callback) => {
             SDK.request({
                 data: {
-                    username: username,
-                    password: password
+                    username: SDK.Encryption.encryptDecrypt(username),
+                    password: SDK.Encryption.encryptDecrypt(password)
                 },
                 method: "POST",
                 url: "/login",
@@ -86,9 +86,11 @@ const SDK = {
                 //If login fails
                 if (err) return cb(err);
 
-                //Else
-
-            })
+                //Else... add from jespers... spørg
+                //Does the token have to be decrypted? no?
+                SDK.Storage.persist("token", data.token);
+                callback(null, data);
+            });
         },
 
         logOut: (callback) => {
@@ -99,6 +101,7 @@ const SDK = {
         }
     },
 
+    //From jespers code
     Storage: {
         prefix: "KantineAppSDK",
         persist: (key, value) => {
