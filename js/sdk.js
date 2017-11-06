@@ -4,7 +4,7 @@ const SDK = {
 
         //Retrieves the token from localStorage - initially (during login) it's empty
         //But after succesful login the token value will be saved in localStorage and used for each request
-    let token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
 
         $.ajax({
             url: SDK.serverURL + options.url,
@@ -84,7 +84,7 @@ const SDK = {
             }, (err, data) => {
 
                 //If login fails
-                if(err) return cb(err);
+                if (err) return cb(err);
 
                 //Else
 
@@ -102,8 +102,22 @@ const SDK = {
     Storage: {
         prefix: "KantineAppSDK",
         persist: (key, value) => {
+            //Hvis value er et objekt bliver det lavet til JSON for at kunne gemmes som en "streng", ellers bliver det gemt som dets nuværende value
             window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
         },
+        load: (key) => {
+
+            const val = window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
+            try {
+                return JSON.parse(val);
+            }
+            catch (e) {
+                return val;
+            }
+        },
+        remove: (key) => {
+            window.localStorage.removeItem(SDK.Storage.prefix + key);
+        }
     },
 
     Encryption: {
@@ -114,15 +128,16 @@ const SDK = {
          * @returns {string}
          */
         encryptDecrypt(input) {
-    var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
-    var output = [];
+            var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
+            var output = [];
 
-    for (var i = 0; i < input.length; i++) {
-        var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
-        output.push(String.fromCharCode(charCode));
+            for (var i = 0; i < input.length; i++) {
+                var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
+                output.push(String.fromCharCode(charCode));
+            }
+            return output.join("");
+        }
+
+
     }
-    return output.join("");
-}
-
-
-}
+};
