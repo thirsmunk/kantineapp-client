@@ -1,90 +1,64 @@
 const SDK = {
-    serverURL:  "",
+    serverURL: "",
     request: (options, callback) => {
 
-        //Array
-        let headers = {};
-
-        //If the object contains headers === true
-        if (options.headers) {
-            //Iterate through the headers array
-            Object.keys(options.headers).forEach((h) => {
-                //Fill out the headers array with the options.headers objects. Using the ternary operator, if the type of options.headers[h] = 'object'
-                //stringify the header and transfer it into the headers array at [h] index, else transfer the options.headers value
-                headers[h] = (typeof options.headers[h] === 'object') ? JSON.stringify(options.headers[h]) : options.headers[h];
-            });
-
-        }
+        //Retrieves the token from localStorage - initially (during login) it's empty
+        //But after succesful login the token value will be saved in localStorage and used for each request
+    let token = localStorage.getItem('token');
 
         $.ajax({
-           url: SDK.serverURL + options.url,
-           method: options.method,
+            url: SDK.serverURL + options.url,
+            method: options.method,
             //The headers are retrieved by the above loop
-            headers: headers,
+            headers: {
+                token: token,
+            },
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify(options.data),
-            //xhr?
+            //xhr is the response from the server (XML HTTP Request)
             success: (data, status, xhr) => {
-               //why null?
-               callback(null, data, status, xhr);
+                //null because callback objects always have an error as first parameters, if it has something in its value there is an error, if
+                //its null its succesful
+                callback(null, data, status, xhr);
             },
             error: (xhr, status, errorThrown) => {
-               callback({xhr: xhr, status: status, error: errorThrown});
+                callback({xhr: xhr, status: status, error: errorThrown});
             }
 
         });
-        
-},
 
-Staff: {
-    findAll: (callback) => {
-        SDK.request({
-            method: "GET",
-            url:"/staff/getOrders/",
-            headers: {
-             filter: {
-                 include: [""]
-             }
-           }
-        }, callback);
     },
 
-    makeReady: (callback) => {
-        SDK.request({
-            method: "POST",
-            url:"/staff/" + "", //orderid
-            headers: {
-             filter: {
-                 include: [""]
-             }
-            }
-        }, callback);
-    }
-},
+    Staff: {
+        findAll: (callback) => {
+            let token = localStorage.getItem('token');
+            SDK.request({
+                method: "GET",
+                url: "/staff/getOrders/",
+            }, callback);
+        },
 
-User: {
+        makeReady: (callback) => {
+            SDK.request({
+                method: "POST",
+                url: "/staff/" + "", //orderid
+            }, callback);
+        }
+    },
+
+    User: {
         createOrder: (callback) => {
             SDK.request({
                 method: "POST",
-                url:"/user/createOrder",
-                headers: {
-                    filter: {
-                        include: [""]
-                    }
-                }
+                url: "/user/createOrder",
             }, callback);
         },
 
         myOrder: (callback) => {
             SDK.request({
                 method: "GET",
-                url:"/user/getOrdersById/" + "", //orderID
-                headers: {
-                    filter: {
-                        include: [""]
-                    }
-                }
+                url: "/user/getOrdersById/" + "", //orderID
             }, callback)
         },
 
@@ -92,16 +66,45 @@ User: {
             SDK.request({
                 method: "GET",
                 url: "/user/getItems/",
-                headers: {
-                    filter: {
-                        include: [""]
-                    }
-                }
             }, callback)
         }
 
 
-}
+    },
+
+    LogInOut: {
+        logIn: (username, password, callback) => {
+            SDK.request({
+                data: {
+                    username: username,
+                    password: password
+                },
+                method: "POST",
+                url: "/login",
+            }, (err, data) => {
+
+                //If login fails
+                if(err) return cb(err);
+
+                //Else
+
+            })
+        },
+
+        logOut: (callback) => {
+            SDK.request({
+                method: "POST",
+                url: "/logout",
+            }, callback)
+        }
+    },
+
+    Storage: {
+        prefix: "KantineAppSDK",
+        persist: (key, value) => {
+            window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
+        },
+    }
 
 
 }
