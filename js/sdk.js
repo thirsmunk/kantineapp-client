@@ -104,7 +104,25 @@ const SDK = {
         persist: (key, value) => {
             window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
         },
+    },
+
+    Encryption: {
+
+        /** Method from https://github.com/KyleBanks/XOREncryption/blob/master/JavaScript/XOREncryption.js
+         * Changed the key to corresponding cipher in our server (Y O L O)
+         * @param input
+         * @returns {string}
+         */
+        encryptDecrypt(input) {
+    var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
+    var output = [];
+
+    for (var i = 0; i < input.length; i++) {
+        var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
+        output.push(String.fromCharCode(charCode));
     }
+    return output.join("");
+}
 
 
 }
