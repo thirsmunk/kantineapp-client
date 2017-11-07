@@ -87,7 +87,7 @@ const SDK = {
                 if (err) return cb(err);
 
                 //Else... add from jespers... spørg
-                //Does the token have to be decrypted? no?
+                //Does the token have to be decrypted? no? Hvordan kan vi være sikre på at vi trækker token ud?
                 SDK.Storage.persist("token", data.token);
                 callback(null, data);
             });
@@ -142,5 +142,13 @@ const SDK = {
         }
 
 
+    },
+
+    //MANGLER MERE FUNKTIONALITET IFT. JESPERS, BASIS FOER VIDEREUDVIKLING
+    Navigation: {
+        loadNav() {
+            $("nav-container").load("nav.html")
+
+        }
     }
 };
