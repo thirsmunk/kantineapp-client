@@ -17,6 +17,7 @@ $(document).ready(() => {
             //If something exists within the error object and the XML HTTP Request returns a 400 error code do...
            if (err && err.xhr.status === 401) {
                //Add error message
+
            }
         });
 
