@@ -84,7 +84,7 @@ const SDK = {
             }, (err, data) => {
 
                 //If login fails
-                if (err) return cb(err);
+                if (err) return callback(err);
 
                 //Else... add from jespers... spørg
                 //Does the token have to be decrypted? no? Hvordan kan vi være sikre på at vi trækker token ud?
@@ -110,7 +110,7 @@ const SDK = {
         },
         load: (key) => {
 
-            const val = window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
+            const val = window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value);
             try {
                 return JSON.parse(val);
             }
