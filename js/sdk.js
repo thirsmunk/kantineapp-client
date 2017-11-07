@@ -84,7 +84,7 @@ const SDK = {
             }, (err, data) => {
 
                 //If login fails
-                if (err) return cb(err);
+                if (err) return callback(err);
 
                 //Else... add from jespers... spørg
                 //Does the token have to be decrypted? no? Hvordan kan vi være sikre på at vi trækker token ud?
@@ -149,7 +149,7 @@ const SDK = {
             //Loads the nav bar
             $("#nav-container").load("nav.html", () => {
                 //Retrieves the user object from our storage REVISE REVISE REVISE, SPØRG OM TOKEN OK
-             //   const currentUser = SDK.User.current();
+                //   const currentUser = SDK.User.current();
                 const activeToken = SDK.Storage.load("token");
                 if (activeToken) {
                     $(".navbar-right").html(`
