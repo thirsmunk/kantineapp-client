@@ -144,11 +144,27 @@ const SDK = {
 
     },
 
-    //MANGLER MERE FUNKTIONALITET IFT. JESPERS, BASIS FOER VIDEREUDVIKLING
     Navigation: {
-        loadNav() {
-            $("nav-container").load("nav.html")
-
+        //Fra Jespers eksempel
+        loadNav: (cb) => {
+            //Loads the nav bar
+            $("#nav-container").load("nav.html", () => {
+                //Retrieves the user object from our storage REVISE REVISE REVISE, SPØRG OM TOKEN OK
+             //   const currentUser = SDK.User.current();
+                const activeToken = SDK.Storage.load("token");
+                if (activeToken) {
+                    $(".navbar-right").html(`
+            <li><a href="my-page.html">Your orders</a></li>
+            <li><a href="#" id="logout-link">Logout</a></li>
+          `);
+                } else {
+                    $(".navbar-right").html(`
+            <li><a href="login.html">Log-in <span class="sr-only">(current)</span></a></li>
+          `);
+                }
+                $("#logout-link").click(() => SDK.User.logOut());
+                cb && cb();
+            });
         }
     }
 };
