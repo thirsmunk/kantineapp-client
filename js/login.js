@@ -1,5 +1,7 @@
 $(document).ready(() => {
 
+    console.log("foo")
+
     //Loads the navbar
     SDK.Navigation.loadNav();
 
@@ -12,4 +14,4 @@ $(document).ready(() => {
     //On success
 
     //On failure
-}
+});
