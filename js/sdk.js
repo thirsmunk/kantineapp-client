@@ -109,8 +109,7 @@ const SDK = {
             window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
         },
         load: (key) => {
-
-            const val = window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
+            const val = window.localStorage.getItem(SDK.Storage.prefix + key);
             try {
                 return JSON.parse(val);
             }
