@@ -17,7 +17,17 @@ $(document).ready(() => {
             //If something exists within the error object and the XML HTTP Request returns a 400 error code do...
            if (err && err.xhr.status === 401) {
                //Add error message
+            $("#inputUsername").attr("placeholder", "Username or password incorrect!");
+            $("#inputPassword").attr("placeholder", "Username or password incorrect!");
+           }
+           else if (err) {
+               console.log("Error occured" + err.print());
+           } else {
+               //Save the username in the localStorage for personalization
+            SDK.Storage.persist("Username", username);
 
+            //Redirect to index.html
+               window.location.href = "index.html";
            }
         });
 
