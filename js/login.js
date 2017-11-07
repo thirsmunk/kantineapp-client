@@ -21,7 +21,7 @@ $(document).ready(() => {
             $("#inputPassword").attr("placeholder", "Username or password incorrect!");
            }
            else if (err) {
-               console.log("Error occured" + err.print());
+               console.log("Error occured");
            } else {
                //Save the username in the localStorage for personalization
             SDK.Storage.persist("Username", username);
