@@ -19,6 +19,7 @@ $(document).ready(() => {
             }
             else if (err) {
                 console.log("Error occured");
+                console.log(err.error);
             } else {
 
                 //Redirect to index.html

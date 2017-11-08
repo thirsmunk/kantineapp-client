@@ -120,7 +120,7 @@ const SDK = {
         prefix: "KantineAppSDK",
         persist: (key, value) => {
             //Hvis value er et objekt bliver det lavet til JSON for at kunne gemmes som en "streng", ellers bliver det gemt som dets nuværende value
-            window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value)
+            window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value);
         },
         load: (key) => {
             const val = window.localStorage.getItem(SDK.Storage.prefix + key);
@@ -151,6 +151,10 @@ const SDK = {
                 var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
                 output.push(String.fromCharCode(charCode));
             }
+
+            //Makes sure to parse the en/decrypted string to JSON if necessary
+            (typeof output == 'object') ? JSON.stringify(output) : output;
+
             return output.join("");
         }
 
