@@ -1,18 +1,25 @@
 const SDK = {
-    serverURL: "http://localhost:8080/",
+    serverURL: "http://localhost:8080/api",
     request: (options, callback) => {
 
-        //Retrieves the token from localStorage - initially (during login) it's empty
-        //But after successful login the token value will be saved in localStorage and used for each request
-        let token = localStorage.getItem('token');
+        //Array of headers
+        let headers = {};
+
+        //If the call contains headers (Authentication or CORS)
+        if (options.headers) {
+            //Iterate through the headers array
+            //Fill out the headers array with the options.headers objects. Using the ternary operator, if the type of options.headers[h] = 'object'
+            //stringify the header and transfer it into the headers array at [h] index, else transfer the options.headers value
+            Object.keys(options.headers).forEach(function (h) {
+                headers[h] = (typeof options.headers[h] === 'object') ? JSON.stringify(options.headers[h]) : options.headers[h];
+            });
+        }
 
         $.ajax({
             url: SDK.serverURL + options.url,
             method: options.method,
             //The headers are retrieved by the above loop
-            headers: {
-                token: token
-            },
+            headers: headers,
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify(options.data),
@@ -32,7 +39,7 @@ const SDK = {
 
     Staff: {
         findAll: (callback) => {
-            let token = localStorage.getItem('token');
+         //Debugging   let token = localStorage.getItem('token');
             SDK.request({
                 method: "GET",
                 url: "/staff/getOrders/",
@@ -76,20 +83,25 @@ const SDK = {
         logIn: (username, password, callback) => {
             SDK.request({
                 data: {
-                    username: SDK.Encryption.encryptDecrypt(username),
-                    password: SDK.Encryption.encryptDecrypt(password)
+                    username: username,
+                    password: password
                 },
                 method: "POST",
-                url: "/login",
+                url: "/start/login",
             }, (err, data) => {
 
                 //If login fails
-                if (err) return callback(err);
+                if (err) {
+                    return callback(err);
+                }
 
-                //Else... add from jespers... spørg
-                //Does the token have to be decrypted? no? Hvordan kan vi være sikre på at vi trækker token ud?
-                SDK.Storage.persist("token", data.token);
-                callback(null, data);
+                else {
+                    callback(null, data);
+                    SDK.Storage.persist("username", data.username);
+                    SDK.Storage.persist("token", data.token);
+                }
+
+
             });
         },
 
@@ -138,6 +150,7 @@ const SDK = {
                 output.push(String.fromCharCode(charCode));
             }
             return output.join("");
+            console.log(output);
         }
 
 
