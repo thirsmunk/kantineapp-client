@@ -22,12 +22,14 @@ const SDK = {
             headers: headers,
             contentType: "application/json",
             dataType: "json",
-            data: JSON.stringify(options.data),
+            //Encrypt sent data
+            data: SDK.Encryption.encryptDecrypt(JSON.stringify(options.data)),
             //xhr is the response from the server (XML HTTP Request)
             success: (data, status, xhr) => {
                 //null because callback objects always have an error as first parameters, if it has something in its value there is an error, if
                 //its null its succesful
-                callback(null, data, status, xhr);
+                //Decrypt received data
+                callback(null, SDK.Encryption.encryptDecrypt(data), status, xhr);
             },
             error: (xhr, status, errorThrown) => {
                 callback({xhr: xhr, status: status, error: errorThrown});
@@ -150,7 +152,6 @@ const SDK = {
                 output.push(String.fromCharCode(charCode));
             }
             return output.join("");
-            console.log(output);
         }
 
 
