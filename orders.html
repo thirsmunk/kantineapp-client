@@ -8,8 +8,24 @@
 
 <script src="js/sdk.js"></script>
 <script>
-    let encrypted = SDK.Encryption.encryptDecrypt("{\"username\":\"dev\",\"password\":\"dev\"}");
+    let encrypted = SDK.Encryption.encryptDecrypt("{\"username\":\"dev\",\"password\":\"dev\"}")
+
     console.log(encrypted);
+
+    console.log(SDK.Encryption.encryptDecrypt(encrypted));
+
+    let encrypted2 = SDK.Encryption.encryptDecrypt("{\n" +
+        "\"user_id\": 76,\n" +
+        "\"username\": \"dev\",\n" +
+        "\"password\": \"852aad9ccfaa879d9a48dedc35675f134edc48cc7c7fb8bd7e66f99a507968ec\",\n" +
+        "\"isPersonel\": false,\n" +
+        "\"token\": \"eyJraWQiOiI3NiIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJZT0xPIiwiZXhwIjoxNTEwNjY3MDYwNDE1LCJ1c2VybmFtZSI6ImRldiJ9.3HRBQOffhbL5FkFKIqPTwlMEo5qiUDgzkC3rngKauSA\"\n" +
+        "}")
+
+    console.log(encrypted2);
+
+    console.log(SDK.Encryption.encryptDecrypt(encrypted2));
+
 </script>
 
 </body>

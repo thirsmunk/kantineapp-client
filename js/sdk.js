@@ -27,7 +27,7 @@ const SDK = {
             //xhr is the response from the server (XML HTTP Request)
             success: (data, status, xhr) => {
                 //null because callback objects always have an error as first parameters, if it has something in its value there is an error, if
-                //its null its succesful
+                //its null its successful
                 //Decrypt received data
                 callback(null, SDK.Encryption.encryptDecrypt(data), status, xhr);
             },
@@ -153,7 +153,7 @@ const SDK = {
             }
 
             //Makes sure to parse the en/decrypted string to JSON if necessary
-            (typeof output == 'object') ? JSON.stringify(output) : output;
+           // (typeof output == 'object') ? JSON.stringify(output) : output;
 
             return output.join("");
         }
