@@ -19,8 +19,9 @@ $(document).ready(() => {
             }
             else if (err) {
                 console.log("Error occured");
-                console.log(err.error);
+                console.log(err);
             } else {
+
 
                 //Redirect to index.html
                 window.location.href = "index.html";

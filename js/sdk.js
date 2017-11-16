@@ -29,7 +29,7 @@ const SDK = {
                 //null because callback objects always have an error as first parameters, if it has something in its value there is an error, if
                 //its null its successful
                 //Decrypt received data
-                callback(null, SDK.Encryption.encryptDecrypt(data), status, xhr);
+                callback(null, SDK.Encryption.encryptDecrypt(JSON.stringify(data)), status, xhr);
             },
             error: (xhr, status, errorThrown) => {
                 callback({xhr: xhr, status: status, error: errorThrown});
@@ -41,7 +41,7 @@ const SDK = {
 
     Staff: {
         findAll: (callback) => {
-         //Debugging   let token = localStorage.getItem('token');
+            //Debugging   let token = localStorage.getItem('token');
             SDK.request({
                 method: "GET",
                 url: "/staff/getOrders/",
@@ -78,7 +78,6 @@ const SDK = {
             }, callback)
         }
 
-
     },
 
     LogInOut: {
@@ -97,11 +96,9 @@ const SDK = {
                     return callback(err);
                 }
 
-                else {
-                    callback(null, data);
-                    SDK.Storage.persist("username", data.username);
-                    SDK.Storage.persist("token", data.token);
-                }
+                SDK.Storage.persist("username", data.username);
+                SDK.Storage.persist("token", data.token);
+                callback(null, data);
 
 
             });
@@ -153,7 +150,7 @@ const SDK = {
             }
 
             //Makes sure to parse the en/decrypted string to JSON if necessary
-           // (typeof output == 'object') ? JSON.stringify(output) : output;
+            // (typeof output == 'object') ? JSON.stringify(output) : output;
 
             return output.join("");
         }
