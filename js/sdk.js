@@ -29,9 +29,13 @@ const SDK = {
                 //null because callback objects always have an error as first parameters, if it has something in its value there is an error, if
                 //its null its successful
                 //Decrypt received data
-                callback(null, SDK.Encryption.encryptDecrypt(JSON.stringify(data)), status, xhr);
+                callback(null, data, status, xhr);
             },
-            error: (xhr, status, errorThrown) => {
+            error: ($xhr, status, errorThrown) => {
+
+                var data = $xhr.responseJSON;
+
+                console.log(data);
                 callback({xhr: xhr, status: status, error: errorThrown});
             }
 
