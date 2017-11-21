@@ -6,9 +6,11 @@ $(document).ready(() => {
     //On click of the login button
     $("#create-button").click(() => {
 
+        console.log("Clicked!");
+
         //Put entered information in boxes into variables
-        const username = $("#inputUsername").val();
-        const password = $("#inputPassword").val();
+        const username = $("#inputCreateUsername").val();
+        const password = $("#inputCreatePassword").val();
 
         //Send variables as parameters in SDK function
         SDK.User.createUser(username, password, (err) => {
