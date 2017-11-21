@@ -77,6 +77,26 @@ const SDK = {
                 method: "GET",
                 url: "/user/getItems/",
             }, callback)
+        },
+
+        createUser: (username, password, callback) => {
+            SDK.request({
+                data: {
+                    username: username,
+                    password: password
+                },
+                method: "POST",
+                url: "/user/createUser",
+            }, (err) => {
+
+                //If creation fails
+                if (err) {
+                    return callback(err);
+                }
+
+                //success
+                callback(null);
+            })
         }
 
     },
