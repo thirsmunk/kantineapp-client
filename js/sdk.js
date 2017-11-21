@@ -29,7 +29,7 @@ const SDK = {
                 //null because callback objects always have an error as first parameters, if it has something in its value there is an error, if
                 //its null its successful
                 //Decrypt received data
-                callback(null, SDK.Encryption.encryptDecrypt(JSON.stringify(data)), status, xhr);
+                callback(null, SDK.Encryption.encryptDecrypt(data), status, xhr);
             },
             error: (xhr, status, errorThrown) => {
                 callback({xhr: xhr, status: status, error: errorThrown});
@@ -95,8 +95,16 @@ const SDK = {
                     return callback(err);
                 }
 
-                SDK.Storage.persist("username", data.username);
-                SDK.Storage.persist("token", data.token);
+                console.log(data);
+
+                //Somehow works, parses the data into a JavaScript object
+                var response = JSON.parse(data);
+
+                //Values to be saved
+                SDK.Storage.persist("user_id", response.user_id);
+                SDK.Storage.persist("username", response.username);
+                SDK.Storage.persist("token", response.token);
+
                 callback(null, data);
 
 

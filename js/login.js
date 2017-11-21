@@ -14,7 +14,10 @@ $(document).ready(() => {
         SDK.LogInOut.logIn(username, password, (err, data) => {
             //If something exists within the error object and the XML HTTP Request returns a 400 error code do...
             if (err && err.xhr.status === 401) {
+
                 //Add error message
+                $("#inputUsername").val("The username or password is incorrect!");
+                $("#inputPassword").val("");
 
             }
             else if (err) {
@@ -22,9 +25,9 @@ $(document).ready(() => {
                 console.log(err);
             } else {
 
-
                 //Redirect to index.html
-                window.location.href = "index.html";
+               // window.location.href = "index.html";
+                console.log("LOGIN");
             }
         });
 

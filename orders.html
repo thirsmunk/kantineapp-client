@@ -8,14 +8,15 @@
 
 <script src="js/sdk.js"></script>
 <script>
-    let encrypted = SDK.Encryption.encryptDecrypt("{\"username\":\"dev\",\"password\":\"dev\"}")
+    let encrypted = SDK.Encryption.encryptDecrypt("{\"username\":\"dev\",\"password\":\"dev\"}");
 
-    console.log(encrypted);
+    console.log("ENCRYPT 1" + encrypted);
 
     console.log(SDK.Encryption.encryptDecrypt(encrypted));
 
+    let encrypted2 = SDK.Encryption.encryptDecrypt("\"m9<<=\u0013&=mvxocn:**>!8\")mcm(*/m`m0<\u001c*+<#!<#nu?. <<cn;6$)!{un* \u0005>.\u000e\u001e%\u00000\u0006\u00010\u0006?\u00067\u001dy,\u001a\u0006z\u00062?\u0014\u0019\u001a\u0006?\u00064\t?\u0015 \u0006z\u00062'\u0018\u00023\u001a~\u00067b* \u0005<,j\u0002%\u00000\u0005\u0016\u001bi7\u001c\u000608%\u0015\u0001';\u00063 4\u0001\r\n4\u00023,4\u00013\u00065\u0000\r\u001e6\u0003\u001a\u0005},k\u00195-4\t8\u0015\n\u0006z\u00064\u001d +0\u0005ua5(\u0015.\b\u001d#x\u00155 ;*9\u0013%a\u0003u8n\u0018)\u0003\u0000|!\u0001\u0013\u0010\u001c\n\u0017\u0007\u001e\u00054&\u0004~:\u001a?m$");
 
-    console.log(encrypted2);
+    console.log("ENCRYPT 2: " + encrypted2);
 
     console.log(SDK.Encryption.encryptDecrypt(encrypted2));
 
