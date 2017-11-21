@@ -112,11 +112,35 @@ const SDK = {
             });
         },
 
-        logOut: (callback) => {
+        logOut: (userid) => {
+
             SDK.request({
+                data: {
+                    user_id: SDK.Storage.load("user_id")
+                },
                 method: "POST",
-                url: "start/logout",
-            }, callback)
+                url: "/start/logout",
+                headers: {
+                    authorization: "Bearer " + SDK.Storage.load("token")
+                }
+            }, (err, callback) => {
+
+                //If logout fails (cant remove token from server)
+                if (err) {
+                    return callback(err);
+                }
+
+                //Else
+                //Remove logged in information
+                SDK.Storage.remove("user_id");
+                SDK.Storage.remove("username");
+                SDK.Storage.remove("token");
+                SDK.Storage.remove("isStaff");
+
+                //Redirect to index.html
+                window.location.href = "index.html";
+
+            });
         }
     },
 
@@ -180,7 +204,8 @@ const SDK = {
             <li><a href="login.html">Log-in <span class="sr-only">(current)</span></a></li>
           `);
                 }
-                $("#logout-link").click(() => SDK.User.logOut());
+                //If logout is clicked, run the logout function
+                $("#logout-link").click(() => SDK.LogInOut.logOut());
                 cb && cb();
             });
         }
