@@ -26,8 +26,7 @@ $(document).ready(() => {
             } else {
 
                 //Redirect to index.html
-               // window.location.href = "index.html";
-                console.log("LOGIN");
+                window.location.href = "index.html";
             }
         });
 

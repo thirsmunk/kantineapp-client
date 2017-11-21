@@ -20,7 +20,9 @@ const SDK = {
             method: options.method,
             //The headers are retrieved by the above loop
             headers: headers,
+            //What the server sends
             contentType: "application/json",
+            //What the client receives
             dataType: "text",
             //Encrypt sent data
             data: SDK.Encryption.encryptDecrypt(JSON.stringify(options.data)),
@@ -95,8 +97,6 @@ const SDK = {
                     return callback(err);
                 }
 
-                console.log(data);
-
                 //Somehow works, parses the data into a JavaScript object
                 var response = JSON.parse(data);
 
@@ -104,6 +104,7 @@ const SDK = {
                 SDK.Storage.persist("user_id", response.user_id);
                 SDK.Storage.persist("username", response.username);
                 SDK.Storage.persist("token", response.token);
+                SDK.Storage.persist("isStaff", response.isPersonel);
 
                 callback(null, data);
 
@@ -114,12 +115,12 @@ const SDK = {
         logOut: (callback) => {
             SDK.request({
                 method: "POST",
-                url: "/logout",
+                url: "start/logout",
             }, callback)
         }
     },
 
-    //From jespers code
+    //From Jespers code
     Storage: {
         prefix: "KantineAppSDK",
         persist: (key, value) => {
@@ -156,9 +157,6 @@ const SDK = {
                 output.push(String.fromCharCode(charCode));
             }
 
-            //Makes sure to parse the en/decrypted string to JSON if necessary
-            // (typeof output == 'object') ? JSON.stringify(output) : output;
-
             return output.join("");
         }
 
@@ -175,7 +173,6 @@ const SDK = {
                 const activeToken = SDK.Storage.load("token");
                 if (activeToken) {
                     $(".navbar-right").html(`
-            <li><a href="my-page.html">Your orders</a></li>
             <li><a href="#" id="logout-link">Logout</a></li>
           `);
                 } else {
