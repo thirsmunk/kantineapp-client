@@ -31,7 +31,7 @@ const SDK = {
                 //null because callback objects always have an error as first parameters, if it has something in its value there is an error, if
                 //its null its successful
                 //Decrypt received data
-                callback(null, SDK.Encryption.encryptDecrypt(data), status, xhr);
+                callback(null, JSON.parse(SDK.Encryption.encryptDecrypt(data)), status, xhr);
             },
             error: (xhr, status, errorThrown) => {
                 callback({xhr: xhr, status: status, error: errorThrown});
@@ -76,6 +76,9 @@ const SDK = {
             SDK.request({
                 method: "GET",
                 url: "/user/getItems/",
+                headers: {
+                    authorization: "Bearer " + SDK.Storage.load("token"),
+                }
             }, callback)
         },
 
@@ -117,14 +120,11 @@ const SDK = {
                     return callback(err);
                 }
 
-                //Somehow works, parses the data into a JavaScript object
-                var response = JSON.parse(data);
-
                 //Values to be saved
-                SDK.Storage.persist("user_id", response.user_id);
-                SDK.Storage.persist("username", response.username);
-                SDK.Storage.persist("token", response.token);
-                SDK.Storage.persist("isStaff", response.isPersonel);
+                SDK.Storage.persist("user_id", data.user_id);
+                SDK.Storage.persist("username", data.username);
+                SDK.Storage.persist("token", data.token);
+                SDK.Storage.persist("isStaff", data.isPersonel);
 
                 callback(null, data);
 
@@ -132,7 +132,7 @@ const SDK = {
             });
         },
 
-        logOut: (userid) => {
+        logOut: () => {
 
             SDK.request({
                 data: {
@@ -193,15 +193,25 @@ const SDK = {
          * @returns {string}
          */
         encryptDecrypt(input) {
-            var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
-            var output = [];
 
-            for (var i = 0; i < input.length; i++) {
-                var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
-                output.push(String.fromCharCode(charCode));
+            //Only encrypts/decrypts if data is sent or received
+            if (input != undefined) {
+                var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
+                var output = [];
+
+                for (var i = 0; i < input.length; i++) {
+                    var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
+                    output.push(String.fromCharCode(charCode));
+                }
+
+                return output.join("");
+
+            } else {
+
+                return input;
+
             }
 
-            return output.join("");
         }
 
 

@@ -1,7 +1,7 @@
 $(document).ready(() => {
 
     //Loads the navbar
-    SDK.User.loadNav();
+    SDK.Navigation.loadNav();
 
     const $menuList = $("#menu-list");
 
@@ -9,7 +9,11 @@ $(document).ready(() => {
     //Vi vælger selv vores argumenter i cb, se sdk.js, vi kunne have valgt mange flere
     SDK.User.findAll((err, items) => {
 
+        if (err) throw err;
+
         //En metode bliver kaldt hver gang der itereres
+        console.log(items);
+
         items.forEach((item) => {
 
             //Bruger man nullermanden på linje 15 og 47 behøver man ikke at bruge concatenation => her laver man en string på
@@ -38,7 +42,7 @@ $(document).ready(() => {
                         </div>
                         <div class="col-lg-8 text-right">
                         <!-- Alt der sættes efter data kan man selv bestemme, for at lave et variabelnavn -->
-                            <button class="btn btn-success purchase-button" data-book-id="${book.id}">Add to basket</button>
+                            <button class="btn btn-success purchase-button" data-item-id="${item.id}">Add to basket</button>
                         </div>
                     </div>
                 </div>
@@ -49,47 +53,41 @@ $(document).ready(() => {
 
         });
 
-        /* MANGLER AT KORRIGERES TIL KANTINE
-
         //Refererer præcis den knap der bliver trykket på, og gemmer id i bookId. Man bruger
         //ikke fat arrow, fordi this-binding ellers ændres. Scopet vil gå helt ud til Window i stedet for blot klassen purchase-button
-        $(".purchase-button").click(function() {
+        $(".purchase-button").click(function () {
             $("#purchase-modal").modal("toggle");
-            const bookId = $(this).data("book-id");
+            const itemId = $(this).data("item-id");
 
             //Iterér igennem array books og callback funktion med parameter book, kald tilbage når den har fundet den bog
             //hvor boget i arrayet er lig den der blev klikket på --> retunér hele bog objektet
-            const book = books.find((book) => book.id === bookId);
-            SDK.Book.addToBasket(book);
+            const book = items.find((item) => item.id === itemId);
+
+            //createOrder
+            //   SDK.Book.addToBasket(book);
         });
 
-         */
 
     });
 
-    /*
 
-    $("#purchase-modal").on("shown.bs.modal", () => {
-        const basket = SDK.Storage.load("basket");
-        const $modalTbody = $("#modal-tbody");
-        basket.forEach((entry) => {
-            $modalTbody.append(`
-        <tr>
-            <td>
-                <img src="${entry.book.imgUrl}" height="60"/>
-            </td>
-            <td>${entry.book.title}</td>
-            <td>${entry.count}</td>
-            <td>kr. ${entry.book.price}</td>
-            <td>kr. 0</td>
-        </tr>
-      `);
-        })
-    });
-
-    */
-
-
-
+    /* $("#purchase-modal").on("shown.bs.modal", () => {
+         const basket = SDK.Storage.load("basket");
+         const $modalTbody = $("#modal-tbody");
+         basket.forEach((entry) => {
+             $modalTbody.append(`
+         <tr>
+             <td>
+                 <img src="${entry.book.imgUrl}" height="60"/>
+             </td>
+             <td>${entry.book.title}</td>
+             <td>${entry.count}</td>
+             <td>kr. ${entry.book.price}</td>
+             <td>kr. 0</td>
+         </tr>
+       `);
+         })
+     });
+ */
 
 });
