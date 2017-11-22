@@ -59,11 +59,24 @@ const SDK = {
     },
 
     User: {
-        createOrder: (callback) => {
+        createOrder: (user_id, basket, callback) => {
             SDK.request({
                 method: "POST",
                 url: "/user/createOrder",
-            }, callback);
+                headers: {
+                    authorization: "Bearer " + SDK.Storage.load("token")
+                },
+                data: {
+                    user_id: user_id,
+                    basket: basket
+                }
+            }, (err, data) => {
+                //fail
+                if (err) return callback(err);
+
+                //success
+                callback(null, data);
+            });
         },
 
         myOrder: (callback) => {
@@ -78,7 +91,7 @@ const SDK = {
                 method: "GET",
                 url: "/user/getItems/",
                 headers: {
-                    authorization: "Bearer " + SDK.Storage.load("token"),
+                    authorization: "Bearer " + SDK.Storage.load("token")
                 }
             }, callback)
         },
@@ -303,6 +316,9 @@ const SDK = {
                 $("#purchase-modal").on("hidden.bs.modal", () => {
                     $("#modal-tbody").children("tr").remove();
                 })
+
+                //If the checkout button is clicked, create the order
+                $("#checkout-button").click(() => SDK.User.createOrder(SDK.Storage.load("user_id"), SDK.Storage.load("basket")));
 
             });
         }
