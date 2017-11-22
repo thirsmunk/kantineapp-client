@@ -270,7 +270,25 @@ const SDK = {
                     cb && cb();
 
                     $("#view-basket-link").click(() => {
+                        //Show the "basket"
                         $("#purchase-modal").modal("toggle");
+
+                        //Fill the basket with the localStorage data
+                        $("#purchase-modal").on("shown.bs.modal", () => {
+                            const basket = SDK.Storage.load("basket");
+                            const $modalTbody = $("#modal-tbody");
+                            basket.forEach((entry) => {
+                                $modalTbody.append(`
+         <tr>
+             <td>Picture to be added</td>
+             <td>${entry.item.itemName}</td>
+             <td>${entry.count}</td>
+             <td>kr. ${entry.item.itemPrice}</td>
+             <td>kr. 0</td>
+         </tr>
+       `);
+                            })
+                        });
                     });
 
                 });
