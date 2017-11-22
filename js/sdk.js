@@ -248,7 +248,7 @@ const SDK = {
     },
 
     Navigation: {
-        //Fra Jespers eksempel
+        //Fra Jespers eksempel -- loads NavBar and all the logic for the two additional top menu bars
         loadNav: (cb) => {
             //Loads the nav bar
             $("#nav-container").load("nav.html", () => {
@@ -306,5 +306,5 @@ const SDK = {
 
             });
         }
-    }
+    },
 };
