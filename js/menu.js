@@ -2,7 +2,7 @@ $(document).ready(() => {
 
     //Loads the navbar
     SDK.Navigation.loadNav();
-    
+
     const $menuList = $("#menu-list");
 
     //Vores callback er hvad der køres, når vi har fået dataene, og er i dette tilfælde en funktion der kører fra linje 10
@@ -54,7 +54,7 @@ $(document).ready(() => {
         //Refererer præcis den knap der bliver trykket på, og gemmer id i bookId. Man bruger
         //ikke fat arrow, fordi this-binding ellers ændres. Scopet vil gå helt ud til Window i stedet for blot klassen purchase-button
         $(".purchase-button").click(function () {
-            $("#purchase-modal").modal("toggle");
+           // $("#purchase-modal").modal("toggle");
             const itemId = $(this).data("item-id");
 
             //Iterér igennem array items og callback funktion med parameter item, kald tilbage når den har fundet det item

@@ -238,6 +238,11 @@ const SDK = {
                 //If logout is clicked, run the logout function
                 $("#logout-link").click(() => SDK.LogInOut.logOut());
                 cb && cb();
+
+                $("#view-basket-link").click(() => {
+                    $("#purchase-modal").modal("toggle");
+                });
+
             });
         }
     }
