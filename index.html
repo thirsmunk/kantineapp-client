@@ -14,13 +14,50 @@
 
     <div class="row" id="nav-container"></div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="purchase-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Your basket</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Title</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody id="modal-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a href="checkout.html">
+                        <button type="button" class="btn btn-success">Proceed to checkout</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="jumbotron">
                 <h1 class="display-3" id="index_hello">Hello!</h1>
                 <p class="lead" id="index_text">Welcome to the CBS Canteen Interface.</p>
                 <hr class="my-4">
-                <p id="index_text2"><a href="login.html">Log in</a> to view this website's functionality. If you don't have an user you can create one <a href="create.html">here</a>.</p>
+                <p id="index_text2"><a href="login.html">Log in</a> to view this website's functionality. If you don't
+                    have an user you can create one <a href="create.html">here</a>.</p>
                 <p class="lead">
                     <a class="btn btn-primary btn-lg" href="orders.html" role="button">View Orders</a>
                 </p>

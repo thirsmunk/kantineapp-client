@@ -277,6 +277,14 @@ const SDK = {
                 //Fill the basket with the localStorage data
                 $("#purchase-modal").on("shown.bs.modal", () => {
                     const basket = SDK.Storage.load("basket");
+
+                    //If no items are in the basket, present this message and return
+                    if(!basket) {
+                        alert("You have to add items to your basket first!");
+                        $("#purchase-modal").modal("toggle");
+                        return;
+                    }
+
                     const $modalTbody = $("#modal-tbody");
                     basket.forEach((entry) => {
                         $modalTbody.append(`
