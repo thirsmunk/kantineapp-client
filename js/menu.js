@@ -12,8 +12,6 @@ $(document).ready(() => {
         if (err) throw err;
 
         //En metode bliver kaldt hver gang der itereres
-        console.log(items);
-
         items.forEach((item) => {
 
             //Bruger man nullermanden på linje 15 og 47 behøver man ikke at bruge concatenation => her laver man en string på
@@ -25,9 +23,9 @@ $(document).ready(() => {
                     <h3 class="panel-title">${item.itemName}</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="col-lg-4">
+                    <!--<div class="col-lg-4">
                         <img src="${item.imgUrl}"/>
-                    </div>
+                    </div> -->
                     <div class="col-lg-8">
                       <dl>
                         <dt>Description</dt>
