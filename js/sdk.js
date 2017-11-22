@@ -133,152 +133,153 @@ const SDK = {
 
     },
 
-        LogInOut: {
-            logIn: (username, password, callback) => {
-                SDK.request({
-                    data: {
-                        username: username,
-                        password: password
-                    },
-                    method: "POST",
-                    url: "/start/login",
-                }, (err, data) => {
+    LogInOut: {
+        logIn: (username, password, callback) => {
+            SDK.request({
+                data: {
+                    username: username,
+                    password: password
+                },
+                method: "POST",
+                url: "/start/login",
+            }, (err, data) => {
 
-                    //If login fails
-                    if (err) {
-                        return callback(err);
-                    }
+                //If login fails
+                if (err) {
+                    return callback(err);
+                }
 
-                    //Values to be saved
-                    SDK.Storage.persist("user_id", data.user_id);
-                    SDK.Storage.persist("username", data.username);
-                    SDK.Storage.persist("token", data.token);
-                    SDK.Storage.persist("isStaff", data.isPersonel);
+                //Values to be saved
+                SDK.Storage.persist("user_id", data.user_id);
+                SDK.Storage.persist("username", data.username);
+                SDK.Storage.persist("token", data.token);
+                SDK.Storage.persist("isStaff", data.isPersonel);
 
-                    callback(null, data);
+                callback(null, data);
 
 
-                });
-            },
-
-            logOut: () => {
-
-                SDK.request({
-                    data: {
-                        user_id: SDK.Storage.load("user_id")
-                    },
-                    method: "POST",
-                    url: "/start/logout",
-                    headers: {
-                        authorization: "Bearer " + SDK.Storage.load("token")
-                    }
-                }, (err, callback) => {
-
-                    //If logout fails (cant remove token from server)
-                    if (err) {
-                        return callback(err);
-                    }
-
-                    //Else
-                    //Remove logged in information
-                    SDK.Storage.remove("user_id");
-                    SDK.Storage.remove("username");
-                    SDK.Storage.remove("token");
-                    SDK.Storage.remove("isStaff");
-                    SDK.Storage.remove("basket");
-
-                    //Redirect to index.html
-                    window.location.href = "index.html";
-
-                });
-            }
+            });
         },
 
-        //From Jespers code
-        Storage: {
-            prefix: "KantineAppSDK",
-            persist: (key, value) => {
-                //Hvis value er et objekt bliver det lavet til JSON for at kunne gemmes som en "streng", ellers bliver det gemt som dets nuværende value
-                window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value);
-            },
-            load: (key) => {
-                const val = window.localStorage.getItem(SDK.Storage.prefix + key);
-                try {
-                    return JSON.parse(val);
+        logOut: () => {
+
+            SDK.request({
+                data: {
+                    user_id: SDK.Storage.load("user_id")
+                },
+                method: "POST",
+                url: "/start/logout",
+                headers: {
+                    authorization: "Bearer " + SDK.Storage.load("token")
                 }
-                catch (e) {
-                    return val;
+            }, (err, callback) => {
+
+                //If logout fails (cant remove token from server)
+                if (err) {
+                    return callback(err);
                 }
-            },
-            remove: (key) => {
-                window.localStorage.removeItem(SDK.Storage.prefix + key);
+
+                //Else
+                //Remove logged in information
+                SDK.Storage.remove("user_id");
+                SDK.Storage.remove("username");
+                SDK.Storage.remove("token");
+                SDK.Storage.remove("isStaff");
+                SDK.Storage.remove("basket");
+
+                //Redirect to index.html
+                window.location.href = "index.html";
+
+            });
+        }
+    },
+
+    //From Jespers code
+    Storage: {
+        prefix: "KantineAppSDK",
+        persist: (key, value) => {
+            //Hvis value er et objekt bliver det lavet til JSON for at kunne gemmes som en "streng", ellers bliver det gemt som dets nuværende value
+            window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value);
+        },
+        load: (key) => {
+            const val = window.localStorage.getItem(SDK.Storage.prefix + key);
+            try {
+                return JSON.parse(val);
+            }
+            catch (e) {
+                return val;
             }
         },
+        remove: (key) => {
+            window.localStorage.removeItem(SDK.Storage.prefix + key);
+        }
+    },
 
-        Encryption: {
+    Encryption: {
 
-            /** Method from https://github.com/KyleBanks/XOREncryption/blob/master/JavaScript/XOREncryption.js
-             * Changed the key to corresponding cipher in our server (Y O L O)
-             * @param input
-             * @returns {string}
-             */
-            encryptDecrypt(input) {
+        /** Method from https://github.com/KyleBanks/XOREncryption/blob/master/JavaScript/XOREncryption.js
+         * Changed the key to corresponding cipher in our server (Y O L O)
+         * @param input
+         * @returns {string}
+         */
+        encryptDecrypt(input) {
 
-                //Only encrypts/decrypts if data is sent or received
-                if (input != undefined) {
-                    var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
-                    var output = [];
+            //Only encrypts/decrypts if data is sent or received
+            if (input != undefined) {
+                var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
+                var output = [];
 
-                    for (var i = 0; i < input.length; i++) {
-                        var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
-                        output.push(String.fromCharCode(charCode));
-                    }
-
-                    return output.join("");
-
-                } else {
-
-                    return input;
-
+                for (var i = 0; i < input.length; i++) {
+                    var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
+                    output.push(String.fromCharCode(charCode));
                 }
+
+                return output.join("");
+
+            } else {
+
+                return input;
 
             }
 
+        }
 
-        },
 
-        Navigation: {
-            //Fra Jespers eksempel
-            loadNav: (cb) => {
-                //Loads the nav bar
-                $("#nav-container").load("nav.html", () => {
-                    //Retrieves the user object from our storage REVISE REVISE REVISE, SPØRG OM TOKEN OK
-                    //   const currentUser = SDK.User.current();
-                    const activeToken = SDK.Storage.load("token");
-                    if (activeToken) {
-                        $(".navbar-right").html(`
+    },
+
+    Navigation: {
+        //Fra Jespers eksempel
+        loadNav: (cb) => {
+            //Loads the nav bar
+            $("#nav-container").load("nav.html", () => {
+                //Retrieves the user object from our storage REVISE REVISE REVISE, SPØRG OM TOKEN OK
+                //   const currentUser = SDK.User.current();
+                const activeToken = SDK.Storage.load("token");
+                if (activeToken) {
+                    $(".navbar-right").html(`
             <li><a href="#" id="view-basket-link"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> View Basket</a></li>
             <li><a href="#" id="logout-link">Logout</a></li>
           `);
-                    } else {
-                        $(".navbar-right").html(`
+                } else {
+                    $(".navbar-right").html(`
             <li><a href="login.html">Log-in <span class="sr-only">(current)</span></a></li>
           `);
-                    }
-                    //If logout is clicked, run the logout function
-                    $("#logout-link").click(() => SDK.LogInOut.logOut());
-                    cb && cb();
+                }
+                //If logout is clicked, run the logout function
+                $("#logout-link").click(() => SDK.LogInOut.logOut());
+                cb && cb();
 
-                    $("#view-basket-link").click(() => {
-                        //Show the "basket"
-                        $("#purchase-modal").modal("toggle");
+                $("#view-basket-link").click(() => {
+                    //Show the "basket"
+                    $("#purchase-modal").modal("toggle");
+                });
 
-                        //Fill the basket with the localStorage data
-                        $("#purchase-modal").on("shown.bs.modal", () => {
-                            const basket = SDK.Storage.load("basket");
-                            const $modalTbody = $("#modal-tbody");
-                            basket.forEach((entry) => {
-                                $modalTbody.append(`
+                //Fill the basket with the localStorage data
+                $("#purchase-modal").on("shown.bs.modal", () => {
+                    const basket = SDK.Storage.load("basket");
+                    const $modalTbody = $("#modal-tbody");
+                    basket.forEach((entry) => {
+                        $modalTbody.append(`
          <tr>
              <td>Picture to be added</td>
              <td>${entry.item.itemName}</td>
@@ -287,11 +288,15 @@ const SDK = {
              <td>kr. 0</td>
          </tr>
        `);
-                            })
-                        });
-                    });
-
+                    })
                 });
-            }
+
+                //Delete the basket contents shown after hiding it, to avoid duplicate
+                $("#purchase-modal").on("hidden.bs.modal", () => {
+                    $("#modal-tbody").children("tr").remove();
+                })
+
+            });
         }
-    };
+    }
+};
