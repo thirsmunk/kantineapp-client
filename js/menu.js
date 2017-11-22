@@ -2,7 +2,7 @@ $(document).ready(() => {
 
     //Loads the navbar
     SDK.Navigation.loadNav();
-
+    
     const $menuList = $("#menu-list");
 
     //Vores callback er hvad der køres, når vi har fået dataene, og er i dette tilfælde en funktion der kører fra linje 10
@@ -57,12 +57,12 @@ $(document).ready(() => {
             $("#purchase-modal").modal("toggle");
             const itemId = $(this).data("item-id");
 
-            //Iterér igennem array books og callback funktion med parameter book, kald tilbage når den har fundet den bog
-            //hvor boget i arrayet er lig den der blev klikket på --> retunér hele bog objektet
-            const book = items.find((item) => item.id === itemId);
+            //Iterér igennem array items og callback funktion med parameter item, kald tilbage når den har fundet det item
+            //hvor itemet i arrayet er lig den der blev klikket på --> returnér hele item objektet
+            const item = items.find((item) => item.id === itemId);
 
             //createOrder
-            //   SDK.Book.addToBasket(book);
+            //   SDK.Book.addToBasket(item);
         });
 
 

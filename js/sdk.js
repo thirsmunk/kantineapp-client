@@ -227,6 +227,7 @@ const SDK = {
                 const activeToken = SDK.Storage.load("token");
                 if (activeToken) {
                     $(".navbar-right").html(`
+            <li><a href="#" id="view-basket-link"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> View Basket</a></li>
             <li><a href="#" id="logout-link">Logout</a></li>
           `);
                 } else {
