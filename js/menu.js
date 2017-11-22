@@ -40,7 +40,7 @@ $(document).ready(() => {
                         </div>
                         <div class="col-lg-8 text-right">
                         <!-- Alt der sættes efter data kan man selv bestemme, for at lave et variabelnavn -->
-                            <button class="btn btn-success purchase-button" data-item-id="${item.id}">Add to basket</button>
+                            <button class="btn btn-success purchase-button" data-item-id="${item.itemId}">Add to basket</button>
                         </div>
                     </div>
                 </div>
@@ -51,15 +51,14 @@ $(document).ready(() => {
 
         });
 
-        //Refererer præcis den knap der bliver trykket på, og gemmer id i bookId. Man bruger
+        //Refererer præcis den knap der bliver trykket på, og gemmer id i itemId. Man bruger
         //ikke fat arrow, fordi this-binding ellers ændres. Scopet vil gå helt ud til Window i stedet for blot klassen purchase-button
         $(".purchase-button").click(function () {
-           // $("#purchase-modal").modal("toggle");
             const itemId = $(this).data("item-id");
 
             //Iterér igennem array items og callback funktion med parameter item, kald tilbage når den har fundet det item
             //hvor itemet i arrayet er lig den der blev klikket på --> returnér hele item objektet
-            const item = items.find((item) => item.id === itemId);
+            const item = items.find((item) => item.itemId === itemId);
 
             //Add the selected item to the user's basket
             SDK.User.addToBasket(item);

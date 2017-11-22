@@ -1,3 +1,4 @@
+/* Jespers overordnede framework er brugt fra https://github.com/Distribuerede-Systemer-2017/javascript-client med direkte kopiering af enkelte metoder */
 const SDK = {
     serverURL: "http://localhost:8080/api",
     request: (options, callback) => {
@@ -107,7 +108,7 @@ const SDK = {
         addToBasket: (item) => {
             let basket = SDK.Storage.load("basket");
 
-            //Check for basket created
+            //Has anything been added to the basket before?
             if (!basket) {
                 return SDK.Storage.persist("basket", [{
                     count: 1,
@@ -115,14 +116,12 @@ const SDK = {
                 }]);
             }
 
-            //Is the item already in the basket?
-            let foundItem = basket.find(i => i.item.id === item.id);
-            //If yes, increment the counter of the said item
+            //Does the item already exist?
+            let foundItem = basket.find(b => b.item.itemId === item.itemId);
             if (foundItem) {
-                let j = basket.indexOf(foundItem);
-                basket[j].count++;
+                let i = basket.indexOf(foundItem);
+                basket[i].count++;
             } else {
-                //push the item into the basket with a count of 1
                 basket.push({
                     count: 1,
                     item: item
@@ -131,149 +130,150 @@ const SDK = {
 
             SDK.Storage.persist("basket", basket);
         }
+
     },
 
-    LogInOut: {
-        logIn: (username, password, callback) => {
-            SDK.request({
-                data: {
-                    username: username,
-                    password: password
-                },
-                method: "POST",
-                url: "/start/login",
-            }, (err, data) => {
+        LogInOut: {
+            logIn: (username, password, callback) => {
+                SDK.request({
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    method: "POST",
+                    url: "/start/login",
+                }, (err, data) => {
 
-                //If login fails
-                if (err) {
-                    return callback(err);
-                }
+                    //If login fails
+                    if (err) {
+                        return callback(err);
+                    }
 
-                //Values to be saved
-                SDK.Storage.persist("user_id", data.user_id);
-                SDK.Storage.persist("username", data.username);
-                SDK.Storage.persist("token", data.token);
-                SDK.Storage.persist("isStaff", data.isPersonel);
+                    //Values to be saved
+                    SDK.Storage.persist("user_id", data.user_id);
+                    SDK.Storage.persist("username", data.username);
+                    SDK.Storage.persist("token", data.token);
+                    SDK.Storage.persist("isStaff", data.isPersonel);
 
-                callback(null, data);
+                    callback(null, data);
 
 
-            });
-        },
+                });
+            },
 
-        logOut: () => {
+            logOut: () => {
 
-            SDK.request({
-                data: {
-                    user_id: SDK.Storage.load("user_id")
-                },
-                method: "POST",
-                url: "/start/logout",
-                headers: {
-                    authorization: "Bearer " + SDK.Storage.load("token")
-                }
-            }, (err, callback) => {
+                SDK.request({
+                    data: {
+                        user_id: SDK.Storage.load("user_id")
+                    },
+                    method: "POST",
+                    url: "/start/logout",
+                    headers: {
+                        authorization: "Bearer " + SDK.Storage.load("token")
+                    }
+                }, (err, callback) => {
 
-                //If logout fails (cant remove token from server)
-                if (err) {
-                    return callback(err);
-                }
+                    //If logout fails (cant remove token from server)
+                    if (err) {
+                        return callback(err);
+                    }
 
-                //Else
-                //Remove logged in information
-                SDK.Storage.remove("user_id");
-                SDK.Storage.remove("username");
-                SDK.Storage.remove("token");
-                SDK.Storage.remove("isStaff");
-                SDK.Storage.remove("basket");
+                    //Else
+                    //Remove logged in information
+                    SDK.Storage.remove("user_id");
+                    SDK.Storage.remove("username");
+                    SDK.Storage.remove("token");
+                    SDK.Storage.remove("isStaff");
+                    SDK.Storage.remove("basket");
 
-                //Redirect to index.html
-                window.location.href = "index.html";
+                    //Redirect to index.html
+                    window.location.href = "index.html";
 
-            });
-        }
-    },
-
-    //From Jespers code
-    Storage: {
-        prefix: "KantineAppSDK",
-        persist: (key, value) => {
-            //Hvis value er et objekt bliver det lavet til JSON for at kunne gemmes som en "streng", ellers bliver det gemt som dets nuværende value
-            window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value);
-        },
-        load: (key) => {
-            const val = window.localStorage.getItem(SDK.Storage.prefix + key);
-            try {
-                return JSON.parse(val);
-            }
-            catch (e) {
-                return val;
+                });
             }
         },
-        remove: (key) => {
-            window.localStorage.removeItem(SDK.Storage.prefix + key);
-        }
-    },
 
-    Encryption: {
-
-        /** Method from https://github.com/KyleBanks/XOREncryption/blob/master/JavaScript/XOREncryption.js
-         * Changed the key to corresponding cipher in our server (Y O L O)
-         * @param input
-         * @returns {string}
-         */
-        encryptDecrypt(input) {
-
-            //Only encrypts/decrypts if data is sent or received
-            if (input != undefined) {
-                var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
-                var output = [];
-
-                for (var i = 0; i < input.length; i++) {
-                    var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
-                    output.push(String.fromCharCode(charCode));
+        //From Jespers code
+        Storage: {
+            prefix: "KantineAppSDK",
+            persist: (key, value) => {
+                //Hvis value er et objekt bliver det lavet til JSON for at kunne gemmes som en "streng", ellers bliver det gemt som dets nuværende value
+                window.localStorage.setItem(SDK.Storage.prefix + key, (typeof value == 'object') ? JSON.stringify(value) : value);
+            },
+            load: (key) => {
+                const val = window.localStorage.getItem(SDK.Storage.prefix + key);
+                try {
+                    return JSON.parse(val);
                 }
+                catch (e) {
+                    return val;
+                }
+            },
+            remove: (key) => {
+                window.localStorage.removeItem(SDK.Storage.prefix + key);
+            }
+        },
 
-                return output.join("");
+        Encryption: {
 
-            } else {
+            /** Method from https://github.com/KyleBanks/XOREncryption/blob/master/JavaScript/XOREncryption.js
+             * Changed the key to corresponding cipher in our server (Y O L O)
+             * @param input
+             * @returns {string}
+             */
+            encryptDecrypt(input) {
 
-                return input;
+                //Only encrypts/decrypts if data is sent or received
+                if (input != undefined) {
+                    var key = ['Y', 'O', 'L', 'O']; //Can be any chars, and any size array
+                    var output = [];
+
+                    for (var i = 0; i < input.length; i++) {
+                        var charCode = input.charCodeAt(i) ^ key[i % key.length].charCodeAt(0);
+                        output.push(String.fromCharCode(charCode));
+                    }
+
+                    return output.join("");
+
+                } else {
+
+                    return input;
+
+                }
 
             }
 
-        }
 
+        },
 
-    },
-
-    Navigation: {
-        //Fra Jespers eksempel
-        loadNav: (cb) => {
-            //Loads the nav bar
-            $("#nav-container").load("nav.html", () => {
-                //Retrieves the user object from our storage REVISE REVISE REVISE, SPØRG OM TOKEN OK
-                //   const currentUser = SDK.User.current();
-                const activeToken = SDK.Storage.load("token");
-                if (activeToken) {
-                    $(".navbar-right").html(`
+        Navigation: {
+            //Fra Jespers eksempel
+            loadNav: (cb) => {
+                //Loads the nav bar
+                $("#nav-container").load("nav.html", () => {
+                    //Retrieves the user object from our storage REVISE REVISE REVISE, SPØRG OM TOKEN OK
+                    //   const currentUser = SDK.User.current();
+                    const activeToken = SDK.Storage.load("token");
+                    if (activeToken) {
+                        $(".navbar-right").html(`
             <li><a href="#" id="view-basket-link"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> View Basket</a></li>
             <li><a href="#" id="logout-link">Logout</a></li>
           `);
-                } else {
-                    $(".navbar-right").html(`
+                    } else {
+                        $(".navbar-right").html(`
             <li><a href="login.html">Log-in <span class="sr-only">(current)</span></a></li>
           `);
-                }
-                //If logout is clicked, run the logout function
-                $("#logout-link").click(() => SDK.LogInOut.logOut());
-                cb && cb();
+                    }
+                    //If logout is clicked, run the logout function
+                    $("#logout-link").click(() => SDK.LogInOut.logOut());
+                    cb && cb();
 
-                $("#view-basket-link").click(() => {
-                    $("#purchase-modal").modal("toggle");
+                    $("#view-basket-link").click(() => {
+                        $("#purchase-modal").modal("toggle");
+                    });
+
                 });
-
-            });
+            }
         }
-    }
-};
+    };
