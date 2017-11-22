@@ -61,8 +61,8 @@ $(document).ready(() => {
             //hvor itemet i arrayet er lig den der blev klikket på --> returnér hele item objektet
             const item = items.find((item) => item.id === itemId);
 
-            //createOrder
-            //   SDK.Book.addToBasket(item);
+            //Add the selected item to the user's basket
+            SDK.User.addToBasket(item);
         });
 
 

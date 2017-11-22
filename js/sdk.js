@@ -100,8 +100,37 @@ const SDK = {
                 //success
                 callback(null);
             })
-        }
 
+
+        },
+
+        addToBasket: (item) => {
+            let basket = SDK.Storage.load("basket");
+
+            //Check for basket created
+            if (!basket) {
+                return SDK.Storage.persist("basket", [{
+                    count: 1,
+                    item: item
+                }]);
+            }
+
+            //Is the item already in the basket?
+            let foundItem = basket.find(i => i.item.id === item.id);
+            //If yes, increment the counter of the said item
+            if (foundItem) {
+                let j = basket.indexOf(foundItem);
+                basket[j].count++;
+            } else {
+                //push the item into the basket with a count of 1
+                basket.push({
+                    count: 1,
+                    item: item
+                });
+            }
+
+            SDK.Storage.persist("basket", basket);
+        }
     },
 
     LogInOut: {
@@ -156,6 +185,7 @@ const SDK = {
                 SDK.Storage.remove("username");
                 SDK.Storage.remove("token");
                 SDK.Storage.remove("isStaff");
+                SDK.Storage.remove("basket");
 
                 //Redirect to index.html
                 window.location.href = "index.html";
