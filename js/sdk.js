@@ -59,7 +59,7 @@ const SDK = {
     },
 
     User: {
-        createOrder: (user_id, basket, callback) => {
+        createOrder: (user_id, items, callback) => {
             SDK.request({
                 method: "POST",
                 url: "/user/createOrder",
@@ -68,7 +68,7 @@ const SDK = {
                 },
                 data: {
                     user_id: user_id,
-                    basket: basket
+                    items: items
                 }
             }, (err, data) => {
                 //fail
@@ -318,6 +318,7 @@ const SDK = {
                 })
 
                 //If the checkout button is clicked, create the order
+                //make loop that only sends item objects and not count etc
                 $("#checkout-button").click(() => SDK.User.createOrder(SDK.Storage.load("user_id"), SDK.Storage.load("basket")));
 
             });
