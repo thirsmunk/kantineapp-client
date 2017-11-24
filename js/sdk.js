@@ -319,7 +319,21 @@ const SDK = {
 
                 //If the checkout button is clicked, create the order
                 //make loop that only sends item objects and not count etc
-                $("#checkout-button").click(() => SDK.User.createOrder(SDK.Storage.load("user_id"), SDK.Storage.load("basket")));
+                $("#checkout-button").click(() => {
+                    let userId = SDK.Storage.load("user_id");
+                    let basket = SDK.Storage.load("basket");
+                    let orderItems = [];
+
+                    //Add the basket's item contents into another array to be sent to the server
+                    //With parameters element, index, array
+                    basket.forEach((item, i, basket) => {
+                        orderItems.push(basket[i].item);
+                    });
+
+                    //Send it off!
+                    SDK.User.createOrder(userId, orderItems);
+
+                });
 
             });
         }
