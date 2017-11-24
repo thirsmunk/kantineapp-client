@@ -70,12 +70,16 @@ const SDK = {
                     user_id: user_id,
                     items: items
                 }
-            }, (err, data) => {
-                //fail
-                if (err) return callback(err);
+            }, (err) => {
 
-                //success
-                callback(null, data);
+                //If creating fails
+                if (err) {
+                    return callback(err);
+                }
+
+                callback(null);
+
+
             });
         },
 
@@ -107,12 +111,12 @@ const SDK = {
             }, (err) => {
 
                 //If creation fails
-                if (err) {
+                if (err, data) {
                     return callback(err);
                 }
 
                 //success
-                callback(null);
+                callback(null, data);
             })
 
 
@@ -331,7 +335,12 @@ const SDK = {
                     });
 
                     //Send it off!
-                    SDK.User.createOrder(userId, orderItems);
+                    SDK.User.createOrder(userId, orderItems, (err, data) => {
+
+                        //Do something when it's succesful or error
+
+
+                    });
 
                 });
 
