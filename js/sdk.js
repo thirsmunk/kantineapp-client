@@ -339,6 +339,25 @@ const SDK = {
 
                         //Do something when it's succesful or error
 
+                        if(err && err.xhr.status === 500) {
+
+                            //Something went wrong server side
+                            alert("Server error!");
+
+                        } else if (err) {
+
+                            alert("Couldn't complete order, please try again");
+
+                        } else {
+
+                            //Success
+                            SDK.Storage.remove("basket");
+                            alert("Order completed!");
+                            $("#purchase-modal").modal("toggle");
+                            window.location.href = "orders.html";
+
+                        }
+
 
                     });
 
