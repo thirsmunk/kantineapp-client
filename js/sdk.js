@@ -86,7 +86,10 @@ const SDK = {
         myOrder: (callback) => {
             SDK.request({
                 method: "GET",
-                url: "/user/getOrdersById/" + "", //orderID
+                url: "/user/getOrdersById/" + SDK.Storage.load("user_id"),
+                headers: {
+                    authorization: "Bearer " + SDK.Storage.load("token")
+                }
             }, callback)
         },
 
@@ -111,7 +114,7 @@ const SDK = {
             }, (err) => {
 
                 //If creation fails
-                if (err, data) {
+                if (err) {
                     return callback(err);
                 }
 
