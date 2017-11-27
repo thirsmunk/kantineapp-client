@@ -291,7 +291,7 @@ const SDK = {
 
                     //Insert View All Orders link
                     $(".navbar-nav").html(`
-            <li><a href="#" id="view-all-orders">View all orders</a></li>
+            <li><a href="stafforders.html" id="view-all-orders">View all orders</a></li>
           `);
 
                     $(".navbar-right").html(`
