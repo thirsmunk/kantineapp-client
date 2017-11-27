@@ -119,7 +119,7 @@ const SDK = {
                 }
 
                 //success
-                callback(null, data);
+                callback(null);
             })
 
 
@@ -272,19 +272,40 @@ const SDK = {
         loadNav: (cb) => {
             //Loads the nav bar
             $("#nav-container").load("nav.html", () => {
-                //Retrieves the user object from our storage REVISE REVISE REVISE, SPØRG OM TOKEN OK
-                //   const currentUser = SDK.User.current();
                 const activeToken = SDK.Storage.load("token");
-                if (activeToken) {
+                const isStaff = SDK.Storage.load("isStaff");
+                //If user is logged in
+                if (activeToken && !isStaff) {
                     $(".navbar-right").html(`
             <li><a href="#" id="view-basket-link"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> View Basket</a></li>
             <li><a href="#" id="logout-link">Logout</a></li>
           `);
+                    //If staff is logged in
+                } else if (activeToken && isStaff) {
+
+                    //Remove the menu link
+                    $("#nav-menu-link").remove();
+
+                    //Remove the My Orders link
+                    $("#nav-orders-link").remove();
+
+                    //Insert View All Orders link
+                    $(".navbar-nav").html(`
+            <li><a href="#" id="view-all-orders">View all orders</a></li>
+          `);
+
+                    $(".navbar-right").html(`
+            <li><a href="#" id="logout-link">Logout</a></li>
+          `);
+
                 } else {
+
                     $(".navbar-right").html(`
             <li><a href="login.html">Log-in <span class="sr-only">(current)</span></a></li>
           `);
                 }
+
+                /*MODULARIZE THIS */
                 //If logout is clicked, run the logout function
                 $("#logout-link").click(() => SDK.LogInOut.logOut());
                 cb && cb();
@@ -299,7 +320,7 @@ const SDK = {
                     const basket = SDK.Storage.load("basket");
 
                     //If no items are in the basket, present this message and return
-                    if(!basket) {
+                    if (!basket) {
                         alert("You have to add items to your basket first!");
                         $("#purchase-modal").modal("toggle");
                         return;
@@ -327,42 +348,49 @@ const SDK = {
                 //If the checkout button is clicked, create the order
                 //make loop that only sends item objects and not count etc
                 $("#checkout-button").click(() => {
-                    let userId = SDK.Storage.load("user_id");
-                    let basket = SDK.Storage.load("basket");
-                    let orderItems = [];
 
-                    //Add the basket's item contents into another array to be sent to the server
-                    //With parameters element, index, array
-                    basket.forEach((item, i, basket) => {
-                        orderItems.push(basket[i].item);
-                    });
+                    confirm("Are you sure you want to create this order?");
 
-                    //Send it off!
-                    SDK.User.createOrder(userId, orderItems, (err, data) => {
+                    if (confirm) {
 
-                        //Do something when it's succesful or error
+                        let userId = SDK.Storage.load("user_id");
+                        let basket = SDK.Storage.load("basket");
+                        let orderItems = [];
 
-                        if(err && err.xhr.status === 500) {
+                        //Add the basket's item contents into another array to be sent to the server
+                        //With parameters element, index, array
+                        basket.forEach((item, i, basket) => {
+                            orderItems.push(basket[i].item);
+                        });
 
-                            //Something went wrong server side
-                            alert("Server error!");
+                        //Send it off!
+                        SDK.User.createOrder(userId, orderItems, (err, data) => {
 
-                        } else if (err) {
+                            //Do something when it's succesful or error
 
-                            alert("Couldn't complete order, please try again");
+                            if (err && err.xhr.status === 500) {
 
-                        } else {
+                                //Something went wrong server side
+                                alert("Server error!");
 
-                            //Success
-                            SDK.Storage.remove("basket");
-                            alert("Order completed!");
-                            $("#purchase-modal").modal("toggle");
-                            window.location.href = "orders.html";
+                            } else if (err) {
 
-                        }
+                                alert("Couldn't complete order, please try again");
+
+                            } else {
+
+                                //Success
+                                SDK.Storage.remove("basket");
+                                alert("Order completed!");
+                                $("#purchase-modal").modal("toggle");
+                                window.location.href = "orders.html";
+
+                            }
 
 
-                    });
+                        });
+
+                    }
 
                 });
 
