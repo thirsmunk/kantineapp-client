@@ -6,7 +6,7 @@ const SDK = {
         //Array of headers
         let headers = {};
 
-        //If the call contains headers (Authentication or CORS)
+        //If the call contains one or more headers it will loop through
         if (options.headers) {
             //Iterate through the headers array
             //Fill out the headers array with the options.headers objects. Using the ternary operator, if the type of options.headers[h] = 'object'
