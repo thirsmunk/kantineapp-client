@@ -102,13 +102,13 @@ const SDK = {
                 headers: {
                     authorization: "Bearer " + SDK.Storage.load("token")
                 }
-            }, (err) => {
+            }, (err, data) => {
 
-                if(err) {
+                if (err) {
                     return callback(err);
                 }
 
-                callback(null);
+                callback(null, data);
             })
         },
 
@@ -336,17 +336,29 @@ const SDK = {
                     }
 
                     const $modalTbody = $("#modal-tbody");
+                    let $sum = 0;
                     basket.forEach((entry) => {
+
+                        $sum += entry.item.itemPrice;
+
                         $modalTbody.append(`
          <tr>
              <td>Picture to be added</td>
              <td>${entry.item.itemName}</td>
              <td>${entry.count}</td>
              <td>kr. ${entry.item.itemPrice}</td>
-             <td>kr. 0</td>
          </tr>
        `);
-                    })
+
+                    });
+
+                    $modalTbody.append(`
+         <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><strong>Total: kr. ${$sum}</strong></td>
+        `);
                 });
 
                 //Delete the basket contents shown after hiding it, to avoid duplicate
@@ -358,9 +370,9 @@ const SDK = {
                 //make loop that only sends item objects and not count etc
                 $("#checkout-button").click(() => {
 
-                    confirm("Are you sure you want to create this order?");
+                    let windowConfirm = confirm("Are you sure you want to create this order?");
 
-                    if (confirm) {
+                    if (windowConfirm) {
 
                         let userId = SDK.Storage.load("user_id");
                         let basket = SDK.Storage.load("basket");

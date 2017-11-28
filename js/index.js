@@ -10,10 +10,13 @@ $(document).ready(() => {
 
         if(SDK.Storage.load("isStaff")) {
             $("#index_text2").text("You are registered as staff and can therefore access all orders. You can use the menu or click the button below.");
+            $(".btn-lg").attr("href", "stafforders.html");
         } else {
             $("#index_text2").text("You are registered as a student and can therefore access your own orders. You can use the menu or click the button below.");
         }
 
+    } else {
+        $(".btn-lg").remove();
     }
 
 

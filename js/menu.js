@@ -9,7 +9,9 @@ $(document).ready(() => {
     //Vi vælger selv vores argumenter i cb, se sdk.js, vi kunne have valgt mange flere
     SDK.User.findAll((err, items) => {
 
-        if (err) throw err;
+        if (err) {
+            alert("Something went wrong!");
+        }
 
         //En metode bliver kaldt hver gang der itereres
         items.forEach((item) => {

@@ -8,7 +8,7 @@ $(document).ready(() => {
     SDK.User.myOrder((orders) => {
 
         //Check if any orders have been made, if none inform user and go away
-        if(orders.length == 0) {
+        if(orders == null) {
             alert("You haven't made any orders yet!");
             window.location.href="menu.html";
             return;
