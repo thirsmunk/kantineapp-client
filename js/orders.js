@@ -5,7 +5,7 @@ $(document).ready(() => {
 
 
     //Get orders from server
-    SDK.User.myOrder((err, orders) => {
+    SDK.User.myOrder((orders) => {
 
         //Check if any orders have been made, if none inform user and go away
         if(orders.length == 0) {
@@ -34,8 +34,6 @@ $(document).ready(() => {
                     $orderItems += order.items[counter].itemName;
                 }
             }
-
-            console.log($orderItems);
 
             //Variable for showing if order has been made ready or not, intially shown as a cross for false
             let $orderReady = '<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>';
