@@ -5,12 +5,12 @@ $(document).ready(() => {
 
 
     //Get orders from server
-    SDK.User.myOrder((orders) => {
+    SDK.User.myOrder((err, orders) => {
 
-        //Check if any orders have been made, if none inform user and go away
-        if(orders == null) {
-            alert("You haven't made any orders yet!");
-            window.location.href="menu.html";
+        // Check if any orders have been made, if none inform user and go away
+        if (err || orders == null) {
+            alert("Something went wrong while retrieving orders! Have you made any orders?");
+            window.location.href = "menu.html";
             return;
         }
 
@@ -26,7 +26,7 @@ $(document).ready(() => {
             for (let counter = 0; counter < order.items.length; counter++) {
 
                 //Formatting for the table, adding a comma to multiple list elements
-                if($orderItems.length >= 1) {
+                if ($orderItems.length >= 1) {
                     $orderItems += ", " + order.items[counter].itemName;
                 }
 
@@ -38,7 +38,7 @@ $(document).ready(() => {
             //Variable for showing if order has been made ready or not, intially shown as a cross for false
             let $orderReady = '<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>';
 
-            if(order.isReady == true) {
+            if (order.isReady == true) {
                 $orderReady = '<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>';
             }
 

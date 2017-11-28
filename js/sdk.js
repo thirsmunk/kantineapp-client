@@ -92,7 +92,15 @@ const SDK = {
                 headers: {
                     authorization: "Bearer " + SDK.Storage.load("token")
                 }
-            }, callback)
+            }, (err, data) => {
+
+                if (err) {
+                    console.log(err);
+                    return callback(err);
+                }
+
+                callback(null, data);
+            })
         },
 
         findAll: (callback) => {
