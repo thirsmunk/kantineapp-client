@@ -52,11 +52,21 @@ const SDK = {
             }, callback);
         },
 
-        makeReady: (callback) => {
+        makeReady: (order_id, callback) => {
             SDK.request({
                 method: "POST",
-                url: "/staff/" + "", //orderid
-            }, callback);
+                url: "/staff/makeReady/" + order_id,
+                headers: {
+                    authorization: "Bearer " + SDK.Storage.load("token")
+                }
+            }, (err) => {
+
+                if(err) {
+                    return callback(err);
+                }
+
+                callback(null);
+            });
         }
     },
 
@@ -92,14 +102,16 @@ const SDK = {
                 headers: {
                     authorization: "Bearer " + SDK.Storage.load("token")
                 }
-            }, (err, data) => {
+            }, (err) => {
 
                 if (err) {
+
                     console.log(err);
+
                     return callback(err);
                 }
 
-                callback(null, data);
+                callback(null);
             })
         },
 
@@ -192,7 +204,7 @@ const SDK = {
                 SDK.Storage.persist("token", data.token);
                 SDK.Storage.persist("isStaff", data.isPersonel);
 
-                callback(null, data);
+                callback(null);
 
 
             });

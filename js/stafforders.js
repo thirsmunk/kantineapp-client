@@ -37,7 +37,7 @@ $(document).ready(() => {
             }
 
             //Variable for showing if order has been made ready or not, intially shown as a cross for false
-            let $orderReady = '<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>';
+            var $orderReady = '<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>';
 
             if (order.isReady == true) {
                 $orderReady = '<span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>';
@@ -45,13 +45,42 @@ $(document).ready(() => {
 
             $ordersTbody.append(`
          <tr>
-             <td>${order.orderId}</td>
+             <td class="order-id">${order.orderId}</td>
              <td>${order.orderTime}</td>
              <td>${$orderItems}</td>
-             <td>${$orderReady}</td>
+             <td><button class="staff-make-ready" data-item-id="${order.orderId}" >${$orderReady}</button></td>
          </tr>
        `);
 
+        });
+
+        $(".staff-make-ready").click(function () {
+
+            const orderId = $(this).data("item-id");
+
+            const order = orders.find((order) => order.orderId === orderId);
+
+            //If the order is already set as ready, don't do anything
+            if(order.isReady) {
+                return;
+            }
+
+            const confirmOrder = confirm("Make order with order id: " + order.orderId + " ready?");
+
+            if (confirmOrder) {
+
+                SDK.Staff.makeReady(order.orderId, (err) => {
+
+                    if (err) {
+                        alert("Couldn't make order ready");
+                        return;
+                    }
+
+                    alert("Order made ready!");
+                    window.location.reload();
+
+                });
+            }
         });
 
 

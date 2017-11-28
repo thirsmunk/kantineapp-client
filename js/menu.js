@@ -42,7 +42,7 @@ $(document).ready(() => {
                         </div>
                         <div class="col-lg-8 text-right">
                         <!-- Alt der sættes efter data kan man selv bestemme, for at lave et variabelnavn -->
-                            <button class="btn btn-success purchase-button" data-item-id="${item.itemId}">Add to basket</button>
+                            <button class="btn btn-success purchase-button" data-item-id="${item.itemId}" >Add to basket</button>
                         </div>
                     </div>
                 </div>

@@ -11,7 +11,7 @@ $(document).ready(() => {
         const password = $("#inputPassword").val();
 
         //Send variables as parameters in SDK function
-        SDK.LogInOut.logIn(username, password, (err, data) => {
+        SDK.LogInOut.logIn(username, password, (err) => {
             //If something exists within the error object and the XML HTTP Request returns a 400 error code do...
             if (err && err.xhr.status === 401) {
 
