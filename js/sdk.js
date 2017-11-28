@@ -43,10 +43,12 @@ const SDK = {
 
     Staff: {
         findAll: (callback) => {
-            //Debugging   let token = localStorage.getItem('token');
             SDK.request({
                 method: "GET",
                 url: "/staff/getOrders/",
+                headers: {
+                    authorization: "Bearer " + SDK.Storage.load("token")
+                }
             }, callback);
         },
 
@@ -100,7 +102,14 @@ const SDK = {
                 headers: {
                     authorization: "Bearer " + SDK.Storage.load("token")
                 }
-            }, callback)
+            }, (err) => {
+
+                if(err) {
+                    return callback(err);
+                }
+
+                callback(null);
+            })
         },
 
         createUser: (username, password, callback) => {
