@@ -102,16 +102,14 @@ const SDK = {
                 headers: {
                     authorization: "Bearer " + SDK.Storage.load("token")
                 }
-            }, (err) => {
+            }, (err, data) => {
 
                 if (err) {
-
-                    console.log(err);
 
                     return callback(err);
                 }
 
-                callback(null);
+                callback(null, data);
             })
         },
 
