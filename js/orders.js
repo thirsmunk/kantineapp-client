@@ -6,9 +6,7 @@ $(document).ready(() => {
 
     //Get orders from server
     SDK.User.myOrder((err, orders) => {
-
-        console.log(orders);
-
+        
         // Check if any orders have been made, if none inform user and go away
         if (err || orders == null) {
             alert("Something went wrong while retrieving orders! Have you made any orders?");
