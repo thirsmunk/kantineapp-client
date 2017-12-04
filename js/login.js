@@ -16,13 +16,15 @@ $(document).ready(() => {
             if (err && err.xhr.status === 401) {
 
                 //Add error message
+                $(".form-group").addClass("has-error");
                 $("#inputUsername").val("The username or password is incorrect!");
                 $("#inputPassword").val("");
 
             }
             else if (err) {
                 console.log("Error occured");
-                console.log(err);
+                $(".form-group").addClass("has-error");
+
             } else {
 
                 //Redirect to index.html

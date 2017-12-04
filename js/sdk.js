@@ -61,7 +61,7 @@ const SDK = {
                 }
             }, (err) => {
 
-                if(err) {
+                if (err) {
                     return callback(err);
                 }
 

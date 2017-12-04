@@ -61,7 +61,7 @@ $(document).ready(() => {
             const order = orders.find((order) => order.orderId === orderId);
 
             //If the order is already set as ready, don't do anything
-            if(order.isReady) {
+            if (order.isReady) {
                 return;
             }
 
