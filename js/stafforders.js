@@ -24,6 +24,9 @@ $(document).ready(() => {
             //Reset the items variable for each order
             let $orderItems = [];
 
+            //DKK total
+            let $orderTotal = 0;
+
             for (let counter = 0; counter < order.items.length; counter++) {
 
                 //Formatting for the table, adding a comma to multiple list elements
@@ -34,6 +37,9 @@ $(document).ready(() => {
                 else {
                     $orderItems += order.items[counter].itemName;
                 }
+
+                $orderTotal += parseInt(order.items[counter].itemPrice);
+
             }
 
             //Variable for showing if order has been made ready or not, intially shown as a cross for false
@@ -48,6 +54,7 @@ $(document).ready(() => {
              <td class="order-id">${order.orderId}</td>
              <td>${order.orderTime}</td>
              <td>${$orderItems}</td>
+             <td>DKK ${$orderTotal}</td>
              <td><button class="staff-make-ready" data-item-id="${order.orderId}" >${$orderReady}</button></td>
          </tr>
        `);
